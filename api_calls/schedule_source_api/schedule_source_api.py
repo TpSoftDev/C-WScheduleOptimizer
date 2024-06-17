@@ -12,6 +12,7 @@ sys.path.append(external_directory)
 
 from utils.Paths import Paths
 from utils.URLs import URLs
+from utils.helperFunctions import parse_tsv
 
 
 #Used to sign in to mgr portal of schedule source. 
@@ -232,4 +233,39 @@ def updateAvailability(newAvailability):
     res = conn.getresponse()
     data = res.read()
     print(data)
-        
+    
+#API Call to retrieve all employees with no termination date (i.e active employees)
+def getAllActiveEmployees():
+    credentials = authenticate("ISU", "seans3", "8032")
+    conn = http.client.HTTPSConnection("test.tmwork.net")
+    payload = ""
+
+    headers = {
+        "Content-Type": "application/json",
+        "x-session-id": credentials["sessionId"],
+        "x-api-token": credentials["apiToken"],
+    }
+
+    path = Paths.SS_EMPLOYEES.value
+    query_params = {
+        "Fields": "ExternalId",
+        "Termdate": "{NULL}"
+    }
+
+    encoded_query_params = urlencode(query_params)
+    url = f"{path}?{encoded_query_params}"
+
+    conn.request(
+        "GET",
+        url,
+        payload,
+        headers,
+    )
+
+    res = conn.getresponse()
+    data = res.read().decode('utf-8')
+    data = parse_tsv(data)
+    print(data)
+    return data
+
+getAllActiveEmployees()

@@ -62,3 +62,15 @@ def getLocationNames(locations):
         string_list.append(item["ExternalBusinessId"])
     return string_list
 
+def parse_tsv(tsv_data):
+    # Split data into lines
+    lines = tsv_data.strip().split('\r\n')
+    # Extract headers
+    headers = lines[0].split('\t')
+    # Parse each line into a dictionary
+    data = [
+        dict(zip(headers, line.split('\t')))
+        for line in lines[1:]
+    ]
+    return data
+

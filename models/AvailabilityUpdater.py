@@ -1,5 +1,14 @@
 ##################################################### Update Availability ##############################################
 from datetime import datetime, timedelta
+import os
+import sys
+
+# Get the current directory of the script
+current_dir = os.path.dirname(os.path.abspath(__file__))
+external_directory = os.path.join(current_dir, "..")
+sys.path.append(external_directory)
+
+from api_calls.schedule_source_api.schedule_source_api import updateAvailability, getAllActiveEmployees
 
 # Define the employee class schedule data
 employee_classSchedule = [
@@ -83,7 +92,30 @@ available_times_per_day = process_class_schedule(available_times_per_day, employ
 # Condense available times into ranges for each day
 condensed_available_times_per_day = condense_available_times_per_day(available_times_per_day)
 
+avail_ranges = []
 # Convert to 12-hour format and print the results
 for day, ranges in condensed_available_times_per_day.items():
     formatted_ranges = format_ranges_12_hour(ranges)
     print(f"{day}: {formatted_ranges}")
+    avail_ranges.append(formatted_ranges)
+    
+    
+#Retrieve all employee's external id numbers
+employees = getAllActiveEmployees()
+employeeIds = []
+for person in employees:
+    if person["ExternalId"]:
+        employeeIds.append(person["ExternalId"])
+
+print(employeeIds)
+
+updatedData = []
+for i in range(1, 8):
+    updatedData.append({
+        "DayId": i,
+        "AvailableRanges": avail_ranges[i-1], 
+        "EmployeeExternalId": 170601496,
+        "Enabled": 1
+    })
+updateAvailability(updatedData)
+print("UPDATED")

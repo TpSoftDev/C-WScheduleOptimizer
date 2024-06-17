@@ -14,6 +14,10 @@ from utils.Paths import Paths
 from utils.URLs import URLs
 from utils.helperFunctions import parse_tsv
 
+# Needed for Mac
+import certifi
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 #Used to sign in to mgr portal of schedule source. 
 #Params: "code" - facility code used to sign in ("ISU For all")

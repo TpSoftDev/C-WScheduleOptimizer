@@ -47,14 +47,20 @@ def quicksort_shifts(shifts):
         return quicksort_shifts(left) + middle + quicksort_shifts(right)
 
 
-
+#Retrieves the list of strings representing each facilities name
+#Used to ensure that the list displayed in the app's dropdown menu are purely strings and not json objects
+#Param - locations - list of json objects with an "ExternalBusinessIdField"
+#Returns the list of strings each representing the value of the ExternalBusinessId field for each location
 def getLocationNames(locations):
     string_list = []
     for item in locations:
         string_list.append(item["ExternalBusinessId"])
     return string_list
 
-
+#Converts tsv data into json objects that are easier to parse through
+#Needed for the getAllActiveEmployees function in the SS api call because the response defaults to tsv format
+#Param - tsv_data - the data response gotten back from SS api at endpoint /Employees
+#Returns the same data set, but in json format instead of tsv
 def parse_tsv(tsv_data):
     # Split data into lines
     lines = tsv_data.strip().split('\r\n')

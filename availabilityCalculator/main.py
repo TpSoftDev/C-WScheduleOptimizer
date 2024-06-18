@@ -12,50 +12,6 @@ from utils.helperFunctions import convert_to_time, convert_to_readable_time, qui
 
 
 
-def printAllEmptyShifts(studentId, scheduleId):
-    print(" Day\t\t  Start\t\t\t  End\t\t\t  Station\n")
-    printEmptyShiftsForDay(studentId, scheduleId, 1)
-    print("\n")
-    printEmptyShiftsForDay(studentId, scheduleId, 2)
-    print("\n")
-    printEmptyShiftsForDay(studentId, scheduleId, 3)
-    print("\n")
-    printEmptyShiftsForDay(studentId, scheduleId, 4)
-    print("\n")
-    printEmptyShiftsForDay(studentId, scheduleId, 5)
-    print("\n")
-    printEmptyShiftsForDay(studentId, scheduleId, 6)
-    print("\n")
-    printEmptyShiftsForDay(studentId, scheduleId, 7)
-    print("\n")
-
-def printEmptyShiftsForDay(studentId, scheduleId, dayId):
-    if dayId == 1 : dayString = "Sunday"
-    if dayId == 2 : dayString = "Monday"
-    if dayId == 3 : dayString = "Tuesday"
-    if dayId == 4 : dayString = "Wednesday"
-    if dayId == 5 : dayString = "Thursday"
-    if dayId == 6 : dayString = "Friday"
-    if dayId == 7 : dayString = "Saturday"
-
-    emptyShifts = getEmptyShiftsForDay(scheduleId, dayId)
-    emptyShifts = filterEmptyShiftsForDay(studentId, emptyShifts)
-    emptyShifts = quicksort_shifts(emptyShifts)
-    
-    for shift in emptyShifts:
-        readableStart = convert_to_readable_time(shift["ShiftStart"])
-        readableEnd = convert_to_readable_time(shift["ShiftEnd"])
-        print(
-            dayString 
-            + "\t\t"
-            + readableStart
-            + "\t\t"
-            + readableEnd
-            + "\t\t"
-            + shift["StationName"]
-        )
-
-
 #Determines what shifts are to be removed from the list of empty shifts and generates new list with those shifts removed
 #Param: "studentId" - the unique university id number for the student we are looking into
 #       "emptyShifts" - the list of empty shifts for a given facility's schedule
@@ -126,5 +82,3 @@ def removeShifts(emptyShifts, shiftsToRemove):
             
     return emptyShifts
 
-
-# printAllEmptyShifts(0, 398997)

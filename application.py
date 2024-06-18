@@ -10,7 +10,6 @@ from utils.helperFunctions import convert_to_readable_time, quicksort_shifts, fo
 from api_calls.schedule_source_api.schedule_source_api import getScheduleId, getEmptyShiftsForDay, getLocations, getScheduleNames
 from availabilityCalculator.main import filterEmptyShiftsForDay
 
-# Needed for Mac
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -173,7 +172,6 @@ selected_schedule_var = tk.StringVar(root)
 
 #Set the initital dropdown value
 selected_facility_var.set("Select a location")
-
 
 #Declare variables that will get initialized in initDropdowns()
 schedule_name_list = []

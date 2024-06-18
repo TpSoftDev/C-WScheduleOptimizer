@@ -272,4 +272,3 @@ def getAllActiveEmployees():
     print(data)
     return data
 
-getAllActiveEmployees()

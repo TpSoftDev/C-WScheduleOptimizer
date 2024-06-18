@@ -15,21 +15,27 @@ def convert_to_time(time_str):
         return None
 
 
-def convert_to_readable_time(datetime_str):
+#Parses a datetime object and returns the readable, string equivilant
+#Param: datetime - the datetime object that can either be formatted by datte and time, or date only
+#Returns the same time in a readable, string format
+def convert_to_readable_time(datetime):
     try:
         # Try to parse the datetime string with both date and time
-        dt = datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S")
+        dt = datetime.strptime(datetime, "%Y-%m-%dT%H:%M:%S")
         # Format the datetime object to a readable 12-hour time string
         readable_time = dt.strftime("%I:%M %p")
     except ValueError:
         # If the above fails, try to parse the string as a date only
-        dt = datetime.strptime(datetime_str, "%Y-%m-%d")
+        dt = datetime.strptime(datetime, "%Y-%m-%d")
         # Format the datetime object to indicate it's a whole day
         readable_time = "12:00 AM"  # Representing the start of the day
 
     return readable_time
 
-
+#Utilizes the quicksort algorithm to display shifts from earliest start time to latest start time
+#Param - shifts - the list of shift objects (in json format) that are unordereds
+#Returns the sorted list of shifts from earliest start time to latest start time
+#Used by the availability calculator to display empty shifts in a more readable format
 def quicksort_shifts(shifts):
     if len(shifts) <= 1:
         return shifts
@@ -41,26 +47,13 @@ def quicksort_shifts(shifts):
         return quicksort_shifts(left) + middle + quicksort_shifts(right)
 
 
-def format_schedule_name(name):
-    # Strip the whitespace at the end
-    stripped_string = name.rstrip()
-    
-    # Replace the internal whitespaces with '+'
-    replaced_string = stripped_string.replace(' ', '+')
-    
-    # Append back the original trailing whitespace
-    trailing_whitespace = name[len(stripped_string):]
-    
-    # Combine the replaced string with the trailing whitespace removed
-    final_string = replaced_string + trailing_whitespace
-    return final_string
-
 
 def getLocationNames(locations):
     string_list = []
     for item in locations:
         string_list.append(item["ExternalBusinessId"])
     return string_list
+
 
 def parse_tsv(tsv_data):
     # Split data into lines

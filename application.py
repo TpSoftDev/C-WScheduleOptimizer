@@ -6,7 +6,7 @@ from tkinter import Toplevel, Text
 import subprocess
 import os
 from utils.Paths import Paths
-from utils.helperFunctions import convert_to_readable_time, quicksort_shifts, format_schedule_name, getLocationNames
+from utils.helperFunctions import convert_to_readable_time, quicksort_shifts, getLocationNames
 from api_calls.schedule_source_api.schedule_source_api import getScheduleId, getEmptyShiftsForDay, getLocations, getScheduleNames
 from availabilityCalculator.main import filterEmptyShiftsForDay
 

@@ -32,6 +32,7 @@ def convert_to_readable_time(datetime):
 
     return readable_time
 
+
 #Utilizes the quicksort algorithm to display shifts from earliest start time to latest start time
 #Param - shifts - the list of shift objects (in json format) that are unordereds
 #Returns the sorted list of shifts from earliest start time to latest start time
@@ -56,6 +57,7 @@ def getLocationNames(locations):
     for item in locations:
         string_list.append(item["ExternalBusinessId"])
     return string_list
+
 
 #Converts tsv data into json objects that are easier to parse through
 #Needed for the getAllActiveEmployees function in the SS api call because the response defaults to tsv format

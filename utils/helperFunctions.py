@@ -18,15 +18,15 @@ def convert_to_time(time_str):
 #Parses a datetime object and returns the readable, string equivilant
 #Param: datetime - the datetime object that can either be formatted by datte and time, or date only
 #Returns the same time in a readable, string format
-def convert_to_readable_time(datetime):
+def convert_to_readable_time(datetime_obj):
     try:
         # Try to parse the datetime string with both date and time
-        dt = datetime.strptime(datetime, "%Y-%m-%dT%H:%M:%S")
+        dt = datetime.strptime(datetime_obj, "%Y-%m-%dT%H:%M:%S")
         # Format the datetime object to a readable 12-hour time string
         readable_time = dt.strftime("%I:%M %p")
     except ValueError:
         # If the above fails, try to parse the string as a date only
-        dt = datetime.strptime(datetime, "%Y-%m-%d")
+        dt = datetime.strptime(datetime_obj, "%Y-%m-%d")
         # Format the datetime object to indicate it's a whole day
         readable_time = "12:00 AM"  # Representing the start of the day
 

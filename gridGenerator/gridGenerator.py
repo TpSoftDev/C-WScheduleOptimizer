@@ -2,9 +2,6 @@
 #The programatic equivilant to manually highlighting a students grid on paper
 #Generates a new time table in the project directory
 
-import requests
-import http
-import json
 from openpyxl import load_workbook
 from datetime import time
 
@@ -21,34 +18,18 @@ from api_calls.workday_api.workday_api import getStudentSchedule
 from utils.helperFunctions import convert_to_time
 
 
-# Construct the path to the Excel file using os.path.join
-# This dynamically constructs the file path based on the current directory of the script
-excel_file_path = os.path.join(current_dir, "Timetable.xlsx")
-print(f"Excel file path: {excel_file_path}")
-
-# Check if the file exists at the constructed path
-# This ensures that the script will not try to open a file that doesn't exist, preventing a FileNotFoundError
-if not os.path.exists(excel_file_path):
-    print("Error: The file Timetable.xlsx does not exist at the specified path.")
-    sys.exit(1)
-
-# Load the workbook using the constructed path
-# This replaces the hard-coded path with a dynamically constructed one
-wb = load_workbook(excel_file_path)
-ws = wb.active
-
 #Iterate through each day to fill in the grid
 #Param: "data" - the student employee's class schedule retrieved from a Workday API Call
 #No return value
-def populateGrid(data):
+def populateGrid(data, ws):
     for course in data:
-        fillInDay(course, "U", 3)
-        fillInDay(course, "M", 4)
-        fillInDay(course, "T", 5)
-        fillInDay(course, "W", 6)
-        fillInDay(course, "R", 7)
-        fillInDay(course, "F", 8)
-        fillInDay(course, "S", 9)
+        fillInDay(course, "U", 3, ws)
+        fillInDay(course, "M", 4, ws)
+        fillInDay(course, "T", 5, ws)
+        fillInDay(course, "W", 6, ws)
+        fillInDay(course, "R", 7, ws)
+        fillInDay(course, "F", 8, ws)
+        fillInDay(course, "S", 9, ws)
 
 
 #Iterates through each time slot in the "day" row of the grid and determines whether or not to highlight that slot
@@ -56,7 +37,7 @@ def populateGrid(data):
 #        "day" - specifies which day we are looking at to compare the class schedule to
 #        "rowNum" - determines which row in the excel sheet to highlight
 # No return value
-def fillInDay(course, day, rowNum):
+def fillInDay(course, day, rowNum, ws):
     max_col = ws.max_column
     hour = 6
     for col_num_outer in range(2, max_col + 1, 12):  # hour loop:
@@ -95,8 +76,10 @@ def isAvailable(course, day, currentTime):
     return True
 
 
-
-def clearGrid():
+#Restores an empty grid so that each time this program runs, the grid will be overwritten
+#Iterates through each cell and fills it with the empty white color
+#No return value or parameters needed
+def clearGrid(ws):
     min_row = 3
     min_col = 2
     max_row = 9
@@ -111,14 +94,38 @@ def clearGrid():
             cell.fill = fillColor
 
 
-# TESTING OUR FUNCTIONS
-clearGrid()
-data1 = getStudentSchedule(0)
+def main():
+    # Construct the path to the Excel file using os.path.join
+    # This dynamically constructs the file path based on the current directory of the script
+    excel_file_path = os.path.join(current_dir, "Timetable.xlsx")
+    print(f"Excel file path: {excel_file_path}")
+    
+    # Load the workbook using the constructed path
+    # This replaces the hard-coded path with a dynamically constructed one
+    wb = load_workbook(excel_file_path)
+    ws = wb.active
 
 
-if data1:
-    populateGrid(data1)
-else:
-    print("Error fetching data from Workday")
+    # Check if the file exists at the constructed path
+    # This ensures that the script will not try to open a file that doesn't exist, preventing a FileNotFoundError
+    if not os.path.exists(excel_file_path):
+        print("Error: The file Timetable.xlsx does not exist at the specified path.")
+        sys.exit(1)
+    
+    
+    clearGrid(ws)
+    data1 = getStudentSchedule(0)
 
-wb.save("Timetable.xlsx")
+
+    if data1:
+        populateGrid(data1, ws)
+    else:
+        print("Error fetching data from Workday")
+
+    wb.save("Timetable.xlsx")
+
+
+#Run the main program when gridGenerator is executed
+if __name__ == "__main__":
+    main()
+

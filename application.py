@@ -57,6 +57,9 @@ def show_file_path(file_path):
 
 
 # Function to be called when the OK button is pressed
+# Triggers the subprocess that runs gridGenerator.py
+# When clicked, program will generate a window displaying where the new grid is 
+# Also displays a window to show available empty shifts given their availability
 def on_ok():
     # Print the values entered in the entry fields
     print(f"Facility Name: {selected_facility_var.get()}")
@@ -90,6 +93,7 @@ def on_ok():
 
        
 #Opens a new window when the schedule is generated that shows the list of available shifts the employee can work
+#Displays a list of shifts sorted by earliest start time to latest and grouped by day of week
 def open_empty_shifts_window(studentId, scheduleId):
     new_window = Toplevel(root)
     
@@ -136,6 +140,7 @@ def select_location(event):
 
 
 #Search function that will display the list of schedules for the location selected in the first input
+#Re-initializes dropdown menus to display schedules specific to the selected location
 def on_location_change(newLocation):
     global schedule_name_list  # Declare that we are using the global variable
     schedule_name_list = getScheduleNames(newLocation)
@@ -156,6 +161,7 @@ def initDropdowns():
     ttk.Label(root, text="Schedule Name:").grid(column=0, row=1, padx=10, pady=5, sticky=tk.W)
     schedule_name = ttk.Combobox(root, textvariable=selected_schedule_var, values=schedule_name_list, width=30)
     schedule_name.grid(column=1, row=1, padx=10, pady=5)
+
 
 # Create the main window
 root = tk.Tk()

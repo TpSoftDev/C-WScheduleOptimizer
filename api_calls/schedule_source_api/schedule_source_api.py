@@ -143,6 +143,8 @@ def getEmptyShiftsForDay(scheduleId, dayId):
 
 #Direct API Call to retrieve a list of locations and their respective ID's
 #Returns a list of the json data retrieved from the API call
+#No Parameter values
+#Returns list of json data that are valid location facility codes
 def getLocations():
     credentials = authenticate("ISU", "seans3", "8032")
     conn = http.client.HTTPSConnection("test.tmwork.net")
@@ -167,9 +169,12 @@ def getLocations():
         headers,
     )
     
+    #Get response
     res = conn.getresponse()
     data = res.read()
     json_data = json.loads(data)
+    
+    #Filter out data that is null, or not a string
     filtered_data = []
     for item in json_data:
         if item["ExternalBusinessId"] is not None:
@@ -180,6 +185,8 @@ def getLocations():
 
 
 #API call to get the list of all schedules active in a specific date range (now to 6 years in the future)
+#Param - location - the facility code selected in the first dropdown menu, used as query parameter in api call
+#Returns a list of strings that represent the name of each schedule specific to "location"
 def getScheduleNames(location):
     credentials = authenticate("ISU", "seans3", "8032")
     conn = http.client.HTTPSConnection("test.tmwork.net")
@@ -209,9 +216,12 @@ def getScheduleNames(location):
         headers,
     )
     
+    #Get response from backend SS server
     res = conn.getresponse()
     data = res.read()
     json_data = json.loads(data)
+    
+    #Populate a simple list of name strings to be used by applications dropdown menu
     names = []
     for item in json_data:
         names.append(item["Name"])
@@ -219,6 +229,9 @@ def getScheduleNames(location):
 
 
 # API call to update (PUT) the availability of a student employee
+# Param - newAvailability - list of json objects that contain AvailableRanges field
+# Replaces the employee's current available ranges with the new available ranges brought in from class schedule
+# No Return value
 def updateAvailability(newAvailability):
     credentials = authenticate("ISU", "seans3", "8032")
     conn = http.client.HTTPSConnection("test.tmwork.net")
@@ -238,7 +251,10 @@ def updateAvailability(newAvailability):
     data = res.read()
     print(data)
     
+    
 #API Call to retrieve all employees with no termination date (i.e active employees)
+#No parameter
+#Returns the list of student Id numbers of all active employees
 def getAllActiveEmployees():
     credentials = authenticate("ISU", "seans3", "8032")
     conn = http.client.HTTPSConnection("test.tmwork.net")

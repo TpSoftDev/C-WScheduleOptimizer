@@ -94,6 +94,7 @@ def clearGrid(ws):
             cell.fill = fillColor
 
 
+#Run the program that updates and saves the TimeTable worksheet
 def main():
     # Construct the path to the Excel file using os.path.join
     # This dynamically constructs the file path based on the current directory of the script
@@ -112,8 +113,11 @@ def main():
         print("Error: The file Timetable.xlsx does not exist at the specified path.")
         sys.exit(1)
     
-    
+    #Empty out the grid so that it will be overwritten
     clearGrid(ws)
+    
+    #Get the student schedule used to populate the grid
+    #TODO: change this parameter once workday api can be accessed
     data1 = getStudentSchedule(0)
 
 
